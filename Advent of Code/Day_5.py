@@ -34,17 +34,21 @@ def seed_to_soil(seed):
     print("output: ", output)
 
 def find_mappings(input):
-    counter = -1
-    print(input)
+    counter = -2
+    print(len(input))
     for x in range(len(input)):
-        if(str(input[x][0]).isalpha):
+        #print(x)
+        if(str(input[x][0]).isalpha()):
             counter+=1
-            break
         elif(input[x] == "\n"):
-            break
+            nums = 0
         else:
-            temp = str(input[x]).replace("",",")
+            temp = str(input[x]).replace(" ",",")
+            temp = temp.replace("\n","")
             nums = temp
+            nums=nums.split(",")
+            print(input[x])
+            print(temp)
             print(nums)
         if counter ==0:
             try:
@@ -88,16 +92,73 @@ def find_mappings(input):
                     humid_to_location_map.append(nums[y])
             except:
                 pass
+        elif counter<0:
+            pass
+
         else:
             print("whoopsie")
             return
+
+def sort_mappings(test):
+    source = []
+    dest = []
+    dist = []
+    count = 0
+    for x in range(len(test)):
+        if count == 0:
+            source.append(test[x])
+            count +=1
+        elif count == 1:
+            dest.append(test[x])
+            count +=1
+        else:
+            dist.append(test[x])
+            count=0
+    print(source,dest,dist)
+    lister = [source,dest,dist]
+    return list(lister)
+
 
 seeds = find_seeds(input_buffer[0])
 print(seeds)
 find_mappings(input_buffer[0:])
 for x in range(len(seeds)):
     seed_to_soil(seeds[x])
-print(humid_to_location_map)
+
+## Updating Maps
+
+print(seed_to_soil_map)
+newer=sort_mappings(seed_to_soil_map)
+seed_to_soil_map.clear()
+seed_to_soil_map = newer
+
+temp = sort_mappings(soil_to_fert_map)
+soil_to_fert_map.clear()
+soil_to_fert_map = temp
+
+temp = sort_mappings(fert_to_water_map)
+fert_to_water_map.clear()
+fert_to_water_map = temp
+
+temp = sort_mappings(water_to_light_map)
+water_to_light_map.clear()
+water_to_light_map = temp
+
+temp = sort_mappings(light_to_temp_map)
+light_to_temp_map.clear()
+light_to_temp_map = temp
+
+temp = sort_mappings(temp_to_humid_map)
+temp_to_humid_map.clear()
+temp_to_humid_map = temp
+
+temp = sort_mappings(humid_to_location_map)
+humid_to_location_map.clear()
+humid_to_location_map = temp
+
+
+
+
 ##Main will find the starting list of seeds, store that to the seeds location
 ##After seeds are stored, will walk through from seed down to location in the end
 ### will find look for the location of source, then match the destination
